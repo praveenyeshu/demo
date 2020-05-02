@@ -1,0 +1,24 @@
+{
+    "101":{
+        "name":"Save",
+        "message":"Data Saved Successfully."
+    },
+    "msg_restaurnat_created_success":{
+        "name":"Saved",
+        "message":"New restaurant created!"
+    },
+    "msg_restaurnat_updated_success":{
+        "name":"Updated",
+        "message":"restaurant updated!"
+    },
+    "msg_restaurnat_deleted_success":{
+        "name":"Deleted",
+        "message":"restaurant deleted!"
+    },
+
+
+    "500100":{
+        "name":"Error",
+        "message":"Restaurant already exist."
+    }
+}

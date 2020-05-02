@@ -1,0 +1,20 @@
+.label-danger {
+    background-color: #FF6C60;
+}
+.label-success {
+    background-color: #A9D86E;
+}
+.label {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+
+    padding: 0.5em 0.8em;
+}

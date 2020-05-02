@@ -1,0 +1,88 @@
+<page-header></page-header>
+<div>
+  <mat-card style="max-width: 700px; margin: auto;">
+    <mat-card-title>Add Restaurnats</mat-card-title>
+
+    <form [formGroup]="restaurantForm" class="form-field-full" style="max-width: 500px;
+    margin: auto;">
+
+
+      <mat-form-field>
+        <mat-label>Restaurant Name</mat-label>
+        <input matInput placeholder="Restaurant Name" formControlName="restaurnatName" required>
+        <mat-error *ngIf="restaurantForm.get('restaurnatName').invalid">Please enter Restaurant Name
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Email" formControlName="email" required>
+        <mat-error *ngIf="restaurantForm.get('email').invalid">
+          Please enter Email</mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput placeholder="Password" formControlName="password" type="password" required>
+        <mat-error *ngIf="restaurantForm.get('password').invalid">Please enter Password
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Confirm Password</mat-label>
+        <input matInput placeholder="Confirm Password" formControlName="confirmPassword" type="password" required>
+        
+        <mat-error *ngIf="restaurantForm.get('confirmPassword').touched && restaurantForm.get('confirmPassword').invalid">
+          <div *ngIf="restaurantForm.get('confirmPassword').errors.required">
+            Password is required.
+          </div>
+        </mat-error>
+
+        
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Mobile</mat-label>
+        <input matInput placeholder="Mobile" type="number" formControlName="mobile" required>
+        <mat-icon matSuffix>smartphone</mat-icon>
+
+        <mat-error *ngIf="restaurantForm.get('mobile').touched && restaurantForm.get('mobile').invalid">
+          <div *ngIf="restaurantForm.get('mobile').errors.required">
+            Mobile Number is required.
+          </div>
+          <div *ngIf="restaurantForm.get('mobile').errors.pattern">
+            Please, Enter 10 digit Mobile Number.
+          </div>
+        </mat-error>
+        
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Address</mat-label>
+        <textarea matInput placeholder="Address" formControlName="address" required></textarea>
+        <mat-error *ngIf="restaurantForm.get('address').invalid">Please enter Address
+        </mat-error>
+      </mat-form-field>
+
+      <button [disabled]="restaurantForm.invalid" (click)="onAdd();" mat-raised-button color="primary" class="m-t-8">Save</button>
+    </form>
+
+  </mat-card>
+  <br />
+  <mat-card style="max-width: 700px; margin: auto;">
+    <mat-card-title>Import</mat-card-title>
+
+    <form [formGroup]="restaurantUploadForm" class="form-field-full" style="max-width: 500px;
+    margin: auto;">
+
+     <app-file-upload (complete)="onFileComplete($event)"></app-file-upload> 
+      <!-- <app-material-file-upload (complete)="onFileComplete($event)"></app-material-file-upload> -->
+      <button mat-button color="warn" (click)="downloadfile()">
+        <mat-icon>file_download</mat-icon>
+        {{'Template'}}
+      </button>
+    </form>
+
+  </mat-card>
+</div>
