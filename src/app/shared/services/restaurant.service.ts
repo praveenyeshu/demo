@@ -35,8 +35,14 @@ export class RestaurantService {
         return this.http.put('/api/restaurants/'+id,data);
     }
 
+    ImportRestruants(data) {
+        return this.http.post('/api/restaurants/import',data);
+    }
+    ImportRestruantsSave(data) {
+        return this.http.post('/api/restaurants/import/save',data);
+    }
+
     downloadRestaurantTemplate():Observable<Blob> {
-        //return this.http.get('/api/restaurants');
         return this.http.get('api/restaurants/template/download', { responseType: 'blob' });
     }
 }

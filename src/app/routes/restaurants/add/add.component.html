@@ -69,20 +69,6 @@
     </form>
 
   </mat-card>
-  <br />
-  <mat-card style="max-width: 700px; margin: auto;">
-    <mat-card-title>Import</mat-card-title>
-
-    <form [formGroup]="restaurantUploadForm" class="form-field-full" style="max-width: 500px;
-    margin: auto;">
-
-     <app-file-upload (complete)="onFileComplete($event)"></app-file-upload> 
-      <!-- <app-material-file-upload (complete)="onFileComplete($event)"></app-material-file-upload> -->
-      <button mat-button color="warn" (click)="downloadfile()">
-        <mat-icon>file_download</mat-icon>
-        {{'Template'}}
-      </button>
-    </form>
-
-  </mat-card>
+  
+  
 </div>

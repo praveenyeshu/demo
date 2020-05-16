@@ -24,6 +24,8 @@ router.route('/restaurants/:restaurant_id')
     .delete(restaurantController.delete);
 router.route('/restaurants/import')
     .post(restaurantController.import);
+router.route('/restaurants/import/Save')
+    .post(restaurantController.importSave);
 router.route('/restaurants/template/download')
     .get(restaurantController.downloadTemplate);
 

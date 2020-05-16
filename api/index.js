@@ -28,8 +28,11 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 // Connect to Mongoose and set connection variable
-mongoose.connect('mongodb+srv://rw:rw@food-ordering-cluster1-qrgai.mongodb.net/food-ordering?retryWrites=true&w=majority', 
-    { useUnifiedTopology: true,useNewUrlParser: true});
+// mongoose.connect('mongodb+srv://rw:rw@food-ordering-cluster1-qrgai.mongodb.net/food-ordering?retryWrites=true&w=majority', 
+//     { useUnifiedTopology: true,useNewUrlParser: true});
+
+mongoose.connect('mongodb://localhost/food-ordering', { useNewUrlParser: true});
+
 var db = mongoose.connection;
 
 // Added check for DB connection

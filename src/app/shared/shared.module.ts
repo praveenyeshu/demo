@@ -24,6 +24,7 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { CustomActionsComponent } from './components/grid/custom-actions/custom-actions.component';
 import { AgActionsRendererComponent } from './components/grid/ag-actions-renderer/ag-actions-renderer.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { ImportStatusRendererComponent } from './components/grid/import-status-renderer/import-status-renderer.component';
 
 
 const THIRD_MODULES = [
@@ -44,6 +45,7 @@ const COMPONENTS = [BreadcrumbComponent,
     CustomSnoRenderComponent,
     CustomActionsComponent,
     AgActionsRendererComponent,
+    ImportStatusRendererComponent,
     ConfirmationDialogComponent];
     
 const COMPONENTS_DYNAMIC = [CustomStatusRenderComponent,CustomSnoRenderComponent];

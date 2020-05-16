@@ -23,6 +23,11 @@
           "state": "add",
           "name": "Add",
           "type": "link"
+        },
+        {
+          "state": "import",
+          "name": "Import",
+          "type": "link"
         }
       ]
     },

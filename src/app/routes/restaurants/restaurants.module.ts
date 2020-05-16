@@ -7,8 +7,9 @@ import { AgGridModule } from 'ag-grid-angular';
 
 import {MatCardModule} from '@angular/material/card';
 import { RestaurantsAddComponent } from './add/add.component';
+import { RestaurantsImportRestaurantsComponent } from './import-restaurants/import-restaurants.component';
 
-const COMPONENTS = [RestaurantsViewComponent, RestaurantsAddComponent];
+const COMPONENTS = [RestaurantsViewComponent, RestaurantsAddComponent, RestaurantsImportRestaurantsComponent];
 const COMPONENTS_DYNAMIC = [];
 
 @NgModule({

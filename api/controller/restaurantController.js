@@ -4,6 +4,8 @@ var xlstojson = require("xls-to-json-lc");
 var xlsxtojson = require("xlsx-to-json-lc");
 var multer = require('multer');
 
+var fs = require('fs');
+
 
 
 const { handleError, ErrorHandler } = require('../helpers/error')
@@ -15,7 +17,25 @@ const { handleError, ErrorHandler } = require('../helpers/error')
 Restaurant = require('../models/restaurantModel');
 // Handle index actions
 exports.index = function (req, res) {
-console.log("get restaurants")
+    console.log("get restaurants");
+
+    // Restaurant.find( {$or: [ { name: "Restaurant 2" }, { mobile: 739202625272 } ]},function (err, restaurants) {
+    //     if (err) {
+
+    //         res.status(500).json({
+    //             status: "error",
+    //             statusCode,
+    //             message
+    //         });
+
+    //     }
+
+    //     res.json({
+    //         status: "success",
+    //         message: "Restaurants retrieved successfully",
+    //         data: restaurants
+    //     });
+    // });
     Restaurant.get(function (err, restaurants) {
         if (err) {
 
@@ -52,7 +72,7 @@ exports.new = function (req, res) {
     Restaurant.get(function (err, restaurants) {
         if (err) {
 
-           return res.status(500).json({
+            return res.status(500).json({
                 status: "error",
                 statusCode,
                 message
@@ -62,10 +82,9 @@ exports.new = function (req, res) {
 
         //console.log(restaurants);
 
-        var existingRestaurant=restaurants.find(f=>f.name==restaurant.name.trim());
+        var existingRestaurant = restaurants.find(f => f.name == restaurant.name.trim());
 
-        if(!existingRestaurant)
-        {
+        if (!existingRestaurant) {
 
             // res.json({
             //             message: 'New restaurant created!',
@@ -81,31 +100,30 @@ exports.new = function (req, res) {
                 });
             });
         }
-        else
-        {
+        else {
             res.status(500).json({
                 status: "error",
-                statusCode:500100,
-                message:"Restaurant already exist."
+                statusCode: 500100,
+                message: "Restaurant already exist."
             });
         }
 
-        
+
 
     });
 
 
     //if (isValidRestaurant(req)) {
-        //save the Restaurants and check for errors
-        // restaurant.save(function (err) {
-        //     if (err)
-        //         res.json(err);
-        //     res.json({
-        //         message: 'New restaurant created!',
-        //         data: restaurant
-        //     });
-        // });
-   // }
+    //save the Restaurants and check for errors
+    // restaurant.save(function (err) {
+    //     if (err)
+    //         res.json(err);
+    //     res.json({
+    //         message: 'New restaurant created!',
+    //         data: restaurant
+    //     });
+    // });
+    // }
 
 };
 // Handle view restaurant info
@@ -118,7 +136,7 @@ exports.view = function (req, res) {
             data: restaurant
         });
     });
-    
+
 };
 // Handle update restaurant info
 exports.update = function (req, res) {
@@ -126,11 +144,11 @@ exports.update = function (req, res) {
         if (err)
             res.send(err);
 
-            restaurant.name = req.body.name;
-            restaurant.email = req.body.email;
-            restaurant.password = req.body.password;
-            restaurant.mobile = req.body.mobile;
-            restaurant.address = req.body.address;
+        restaurant.name = req.body.name;
+        restaurant.email = req.body.email;
+        restaurant.password = req.body.password;
+        restaurant.mobile = req.body.mobile;
+        restaurant.address = req.body.address;
 
         // save the Restaurants and check for errors
         restaurant.save(function (err) {
@@ -171,19 +189,136 @@ function isValidRestaurant(restaurant) {
     console.log("isValidRestaurant")
     console.log(restaurant)
 
-    if (restaurant.name && restaurant.email && restaurant.password && restaurant.mobile && 
+    if (restaurant.name && restaurant.email && restaurant.password && restaurant.mobile &&
         restaurant.address) {
 
-        if (restaurant.name.trim()!="" && restaurant.email.trim()!="" && 
-        restaurant.password.trim()!="" && restaurant.mobile.trim()!="" && 
-        restaurant.address.trim()!="") {
+        if (restaurant.name.trim() != "" && restaurant.email.trim() != "" &&
+            restaurant.password.trim() != "" && restaurant.mobile.trim() != "" &&
+            restaurant.address.trim() != "") {
 
         }
         else
-            throw new ErrorHandler(500100, "Bad Request")
+            throw new ErrorHandler(500101, "Bad Request")
     }
     else
-        throw new ErrorHandler(500100, "Bad Request")
+        throw new ErrorHandler(500101, "Bad Request")
+}
+
+async function validateImportData(results) {
+
+    let returnList = [];
+
+    for (let i = 0; i < results.length; i++) {
+        let data = results[i];
+
+        if (data.name && data.email && data.password && data.mobile && data.address) {
+
+            if (validateEmail(data.email.trim()) && validateMobile(data.mobile.trim())) {
+                //pushing it to list
+                returnList.push(
+                    {
+                        name: data.name ? data.name : '',
+                        email: data.email ? data.email : '',
+                        password: data.password ? data.password : '',
+                        mobile: data.mobile ? data.mobile : '',
+                        address: data.address ? data.address : '',
+                        isValid: true
+                    }
+                );
+
+            }
+            else {
+                //pushing it to list
+                returnList.push(
+                    {
+                        name: data.name ? data.name : '',
+                        email: data.email ? data.email : '',
+                        password: data.password ? data.password : '',
+                        mobile: data.mobile ? data.mobile : '',
+                        address: data.address ? data.address : '',
+                        isValid: false,
+                        ErrorInfo: 'Invalid Mobile/Email.'
+                    }
+                );
+            }
+
+        }
+        else {
+
+            //pushing it to list
+            returnList.push(
+                {
+                    name: data.name ? data.name : '',
+                    email: data.email ? data.email : '',
+                    password: data.password ? data.password : '',
+                    mobile: data.mobile ? data.mobile : '',
+                    address: data.address ? data.address : '',
+                    isValid: false,
+                    ErrorInfo: 'Data Missing/Invalid.'
+                }
+            );
+
+        }
+    }
+
+
+    // records =await Restaurant.find().where('name').in(data.name.trim()).exec();
+    // console.debug(records);
+    console.debug("duplicate check");
+    let duplicateCheckList = returnList.filter(f => f.isValid);
+    if (duplicateCheckList) {
+        console.debug("finding");
+        await Restaurant.find(
+            {
+                $or: [
+                    { name: { $in: duplicateCheckList.map(m => m.name.trim()) } },
+                    { email: { $in: duplicateCheckList.map(m => m.email.trim()) } },
+                    { mobile: { $in: duplicateCheckList.map(m => m.mobile.trim()) } }
+                ]
+            }, function (err, restaurants) {
+
+                console.debug('found');
+                console.debug(restaurants);
+
+                if (restaurants.length > 0) {
+
+                    //push exists list to aray
+                    restaurants.forEach(f => {
+                        let exis = returnList.find(fi => fi.isValid && f.name == fi.name);
+                        console.debug(exis);
+                        exis.isValid = false;
+                        exis.ErrorInfo = 'Record name/email/mobile already exists.';
+
+                    });
+
+                }
+
+
+            });
+    }
+
+
+
+
+
+    return returnList;
+}
+
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+
+function validateMobile(mobile) {
+    var phoneno = /^\d{10}$/;
+    if (phoneno.test(mobile)) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 
@@ -219,7 +354,11 @@ exports.import = function (req, res) {
         }
         /** Multer gives us file info in req.file object */
         if (!req.file) {
-            res.json({ error_code: 1, err_desc: "No file passed" });
+            res.status(500).json({
+                status: "error",
+                statusCode: 500102,
+                message: "No file passed."
+            });
             return;
         }
         /** Check the extension of the incoming file and
@@ -235,16 +374,100 @@ exports.import = function (req, res) {
                 input: req.file.path,
                 output: null, //since we don't need output.json
                 lowerCaseHeaders: true
-            }, function (err, result) {
+            }, async function (err, result) {
                 if (err) {
+
                     return res.json({ error_code: 1, err_desc: err, data: null });
                 }
-                res.json({ error_code: 0, err_desc: null, data: result });
+                //success fully imported and has data object
+
+                //validate data
+                let importedData = await validateImportData(result);
+
+                console.debug('Returned');
+
+                console.debug('deleting file');
+
+
+
+
+                // console.debug('calling');
+                // let inlist=result.map(a=>a.name)
+                // let a = await Restaurant.find().where('name').in(inlist).exec();
+
+                // console.log(a);
+                console.debug('done');
+                res.json({ status: "success", statusCode: 0, message: null, data: importedData });
             });
+
+            //deleting imported file
+            try {
+                fs.unlinkSync(req.file.path);
+            }
+            catch (e) {
+                //err
+            }
+
         } catch (e) {
-            res.json({ error_code: 1, err_desc: "Corupted excel file" });
+            res.status(500).json({
+                status: "error",
+                statusCode: 500101,
+                message: "Corupted excel file."
+            });
         }
     })
+};
+
+
+
+
+// Handle Import Save Restaurants
+exports.importSave = function (req, res) {
+    console.debug("importSave");
+
+    let restaurantList = [];
+
+    req.body.forEach(item => {
+
+        let restaurant = new Restaurant();
+        restaurant.name = item.name;
+        restaurant.email = item.email;
+        restaurant.password = item.password;
+        restaurant.mobile = item.mobile;
+        restaurant.address = item.address;
+        restaurant.status = "pending";
+        restaurant.emailStatus = "not verified";
+        restaurant.isActive = true;
+        restaurant.isDeleted = false;
+
+        restaurantList.push(restaurant)
+        
+
+        // restaurant.save(function (err) {
+        //     console.debug(err);
+        // });
+
+    });
+    console.debug("restaurantList");
+    console.debug(restaurantList);
+    let restaurant = new Restaurant();
+
+    restaurant.collection.insertMany(restaurantList, onInsert);
+
+    function onInsert(err, docs) {
+        if (err) {
+            // TODO: handle error
+        } else {
+            console.info('%d potatoes were successfully stored.', docs.length);
+            res.json({
+                message: 'Restaurant created successfully..',
+                data: req.body
+            });
+        }
+    }
+
+    
+
 };
 
 

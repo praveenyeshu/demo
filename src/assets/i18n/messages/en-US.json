@@ -15,10 +15,22 @@
         "name":"Deleted",
         "message":"restaurant deleted!"
     },
+    "msg_restaurnat_import_success":{
+        "name":"Success",
+        "message":"File imported successfully!"
+    },
 
 
     "500100":{
         "name":"Error",
         "message":"Restaurant already exist."
+    },
+    "500101":{
+        "name":"Error",
+        "message":"Corupted excel file."
+    },
+    "500102":{
+        "name":"Error",
+        "message":"No file passed."
     }
 }

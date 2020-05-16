@@ -1,0 +1,45 @@
+<page-header></page-header>
+<div>
+
+    <section class="demo-expansion">
+        <h2>import Restaurants</h2>
+        <mat-accordion>
+            <mat-expansion-panel #panel1 [expanded]="true">
+                <mat-expansion-panel-header>Select file</mat-expansion-panel-header>
+                <form [formGroup]="restaurantUploadForm" class="form-field-full">
+
+
+
+                    <form action="/api/upload" method="post" enctype="multipart/form-data">
+                        <input (change)="fileChange($event)" type="file" class="custom-file-input" id="inputGroupFile01"
+                            aria-describedby="inputGroupFileAddon01">
+                        <button mat-button color="warn" (click)="onUpload()">
+                            <mat-icon>file_upload</mat-icon>
+                            {{'Upload'}}
+                        </button>
+                    </form>
+
+
+                    <button mat-button color="warn" (click)="downloadfile()">
+                        <mat-icon>file_download</mat-icon>
+                        {{'Template'}}
+                    </button>
+
+                </form>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel #panel2 [expanded]="isImported" [disabled]="!isImported">
+                <mat-expansion-panel-header>Validate Data</mat-expansion-panel-header>
+                <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine"
+                    [gridOptions]="gridOptions">
+                </ag-grid-angular>
+                <mat-action-row>
+                    <button [disabled]="!isImported" mat-raised-button color="primary" class="m-t-8" [disabled]="disableSave"
+                    (click)="onSaveAll();" >Save All</button>
+                    <button mat-button (click)="onCancel();">Cancel</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </section>
+
+</div>
